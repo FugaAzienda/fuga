@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+body {
+  background: #ffffff;
+  color: #111111;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+h1, h2, h3, p, span, li {
+  color: inherit;
+}
+
+input, select, li, ul {
+  color: #111111;
+}
