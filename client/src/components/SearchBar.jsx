@@ -2,10 +2,11 @@
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 
-const CITTA = ["Milano", "Milazzo", "Vercelli", "Rovigo","Varese","Roma", "Genova", "Firenza", "Torino", "Campobasso", "Napoli", "Catanzaro", "Trento", "Venezia", "Bologna", "Perugia", "Palermo", "Trieste", "Ancona", "Aquila"]
+const CITTA = ["Milano", "Milazzo", "Vercelli", "Rovigo", "Varese", "Roma", "Genova", "Firenza", "Torino", "Campobasso", "Napoli", "Catanzaro", "Trento", "Venezia", "Bologna", "Perugia", "Palermo", "Trieste", "Ancona", "Aquila"]
 
 export default function SearchBar() {
-  const router=useRouter();
+  const [indiceAttivo, setIndiceAttivo] = useState(-1)
+  const router = useRouter();
   const [destinazione, setDestinazione] = useState("")
   const [checkin, setCheckin] = useState("")
   const [checkout, setCheckout] = useState("")
@@ -22,6 +23,22 @@ export default function SearchBar() {
       setSuggerimenti(filtrati);
     }
   }
+  function handleTasto(e) {
+    if (e.key === "ArrowDown") {
+      setIndiceAttivo(prev => Math.min(prev + 1, suggerimenti.length - 1))
+    }
+    if (e.key === "ArrowUp") {
+      setIndiceAttivo(prev => Math.max(prev - 1, -1))
+    }
+    if (e.key === "Enter" && indiceAttivo >= 0) {
+      setDestinazione(suggerimenti[indiceAttivo])
+      setSuggerimenti([])
+      setIndiceAttivo(-1)
+    }
+    if (e.key === "Enter" && indiceAttivo === -1) {
+      handleCerca()
+    }
+  }
   return (
     <div className="max-w-4xl mx-auto flex flex-wrap gap-3 bg-white border border-gray-200 rounded-2xl p-4 shadow-md">
       <div className="relative flex-1 min-w-48 ">
@@ -29,16 +46,17 @@ export default function SearchBar() {
           type="text"
           placeholder="Dove vuoi andare?"
           value={destinazione}
+          onKeyDown={handleTasto}
           onChange={(e) => handleDestinazione(e.target.value)}
           className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-gray-400"
         />
         {suggerimenti.length > 0 && (
-          <ul className="absolute top-full left-0 bg-white border border-gray-200 rounded-xl shadow-lg mt-1 w-full z-10">
-            {suggerimenti.map(citta => (
+          <ul className="absolute top-full left-0 bg-white border border-gray-200 rounded-lg overflow-hidden shadow-lg mt-1 w-full z-10">
+            {suggerimenti.map((citta, index) => (
               <li
                 key={citta}
                 onClick={() => { setDestinazione(citta); setSuggerimenti([]) }}
-                className="px-4 py-2 hover:bg-gray-50 cursor-pointer text-sm"
+                className={`px-4 py-2 cursor-pointer text-sm ${indiceAttivo === index ? "bg-gray-100" : "hover:bg-gray-50"}`}
               >
                 {citta}
               </li>

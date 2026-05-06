@@ -1,6 +1,7 @@
 "use client"
 import { useRouter } from "next/navigation"
 import SearchBar from "@/components/SearchBar"
+import { STRUTTURE } from "@/lib/data"
 
 export default function HomePage() {
   const router = useRouter()
@@ -24,25 +25,19 @@ export default function HomePage() {
       <section className="max-w-5xl mx-auto px-4 py-16">
         <h2 className="text-2xl font-bold mb-8">Destinazioni popolari</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {[
-            { citta: "Milano", case: "128 strutture" },
-            { citta: "Roma", case: "214 strutture" },
-            { citta: "Firenze", case: "97 strutture" },
-            { citta: "Venezia", case: "74 strutture" },
-            { citta: "Napoli", case: "89 strutture" },
-            { citta: "Bologna", case: "56 strutture" },
-            { citta: "Torino", case: "63 strutture" },
-            { citta: "Palermo", case: "41 strutture" },
-          ].map(({ citta, case: n }) => (
-            <div
-              key={citta}
-              onClick={() => router.push(`/cerca?dest=${citta}`)}
-              className="bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-2xl p-5 cursor-pointer transition-colors"
-            >
-              <p className="font-semibold text-gray-900">{citta}</p>
-              <p className="text-sm text-gray-400 mt-1">{n}</p>
-            </div>
-          ))}
+          {["Milano", "Roma", "Firenze", "Venezia", "Napoli", "Bologna", "Torino", "Palermo"].map(citta => {
+            const count = STRUTTURE.filter(s => s.citta === citta).length
+            return (
+              <div
+                key={citta}
+                onClick={() => router.push(`/cerca?dest=${citta}`)}
+                className="bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-2xl p-5 cursor-pointer transition-colors"
+              >
+                <p className="font-semibold text-gray-900">{citta}</p>
+                <p className="text-sm text-gray-400 mt-1">{count} strutture</p>
+              </div>
+            )
+          })}
         </div>
       </section>
 
