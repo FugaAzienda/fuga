@@ -8,7 +8,7 @@ export default function Header() {
   return (
     <header className="border-b border-gray-100 bg-white sticky top-0 z-40">
       <div className="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
-        
+
         <Link href="/" className="text-xl font-bold text-gray-900">
           Fuga
         </Link>
@@ -31,6 +31,12 @@ export default function Header() {
             className="text-sm bg-gray-900 text-white px-4 py-2 rounded-xl hover:bg-gray-700 transition-colors"
           >
             Registrati
+          </Link>
+          <Link
+            href="/"
+            className={`text-sm ${pathname === "/" ? "text-gray-900 font-semibold" : "text-gray-400 hover:text-gray-900"}`}
+          >
+            Home
           </Link>
         </nav>
 

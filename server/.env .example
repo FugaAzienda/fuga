@@ -1,4 +1,2 @@
-PORT=
-SUPABASE_URL=
-SUPABASE_SERVICE_KEY=
-STRIPE_SECRET_KEY=
+SUPABASE_URL=https://yzxvqboalzrlelvojgbk.supabase.co
+SUPABASE_SERVICE_KEY=sb_secret_-AVjtL7Wk-lEJGNJp-GtKw_6PsvPT5m

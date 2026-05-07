@@ -1,9 +1,10 @@
 "use client"
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 
 export default function StruttureList({ strutture }) {
   const [selezionata, setSelezionata] = useState(null)
-
+  const router = useRouter()
   return (
     <>
       {/* LISTA */}
@@ -16,7 +17,7 @@ export default function StruttureList({ strutture }) {
           >
             <div className="flex justify-between items-start mb-2">
               <h2 className="font-semibold text-gray-900">{s.nome}</h2>
-              <span className="text-sm font-bold text-gray-900">€{s.prezzo}/notte</span>
+              <span className="text-sm font-bold text-gray-900">€{s.prezzo_base}/notte</span>
             </div>
             <p className="text-sm text-gray-400 mb-1">{s.zona} · {s.posti} ospiti</p>
             <p className="text-sm text-gray-500 line-clamp-2">{s.descrizione}</p>
@@ -49,8 +50,11 @@ export default function StruttureList({ strutture }) {
             <p className="text-sm text-gray-400 mb-3">{selezionata.zona} · {selezionata.citta}</p>
             <p className="text-gray-600 mb-6">{selezionata.descrizione}</p>
             <div className="flex justify-between items-center">
-              <span className="text-2xl font-bold text-gray-900">€{selezionata.prezzo}<span className="text-sm font-normal text-gray-400">/notte</span></span>
-              <button className="bg-gray-900 text-white px-6 py-3 rounded-xl text-sm font-medium hover:bg-gray-700 transition-colors">
+              <span className="text-2xl font-bold text-gray-900">€{selezionata.prezzo_base}<span className="text-sm font-normal text-gray-400">/notte</span></span>
+              <button
+                onClick={() => router.push(`/camere/${selezionata.id}`)}
+                className="bg-gray-900 text-white px-6 py-3 rounded-xl text-sm font-medium hover:bg-gray-700 transition-colors"
+              >
                 Prenota
               </button>
             </div>
