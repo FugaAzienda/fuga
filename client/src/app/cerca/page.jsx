@@ -24,7 +24,7 @@ export default async function CercaPage({ searchParams }) {
         <p className="text-gray-400 mb-8">
           {risultati.length} strutture trovate
         </p>
-        <StruttureList strutture={risultati} />
+        <StruttureList strutture={risultati} checkin={params?.checkin} checkout={params?.checkout} ospiti={params?.ospiti} />
       </div>
     </main>
   )

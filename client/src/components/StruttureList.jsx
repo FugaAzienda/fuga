@@ -2,7 +2,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 
-export default function StruttureList({ strutture }) {
+export default function StruttureList({ strutture, checkin, checkout, ospiti }) {
   const [selezionata, setSelezionata] = useState(null)
   const router = useRouter()
   return (
@@ -52,7 +52,7 @@ export default function StruttureList({ strutture }) {
             <div className="flex justify-between items-center">
               <span className="text-2xl font-bold text-gray-900">€{selezionata.prezzo_base}<span className="text-sm font-normal text-gray-400">/notte</span></span>
               <button
-                onClick={() => router.push(`/camere/${selezionata.id}`)}
+                onClick={() => router.push(`/prenota/${selezionata.id}?checkin=${checkin}&checkout=${checkout}&ospiti=${ospiti}`)}
                 className="bg-gray-900 text-white px-6 py-3 rounded-xl text-sm font-medium hover:bg-gray-700 transition-colors"
               >
                 Prenota
