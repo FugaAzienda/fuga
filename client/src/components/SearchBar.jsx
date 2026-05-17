@@ -67,12 +67,18 @@ export default function SearchBar() {
       <input
         type="date"
         value={checkin}
-        onChange={(e) => setCheckin(e.target.value)}
+        min={new Date().toISOString().split("T")[0]}
+        onChange={(e) => {
+          setCheckin(e.target.value)
+          if (checkout && e.target.value >= checkout) setCheckout("")
+        }}
         className="border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-gray-400"
       />
       <input
         type="date"
         value={checkout}
+        min={checkin || new Date().toISOString().split("T")[0]}
+        disabled={!checkin}
         onChange={(e) => setCheckout(e.target.value)}
         className="border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-gray-400"
       />

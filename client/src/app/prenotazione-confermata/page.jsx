@@ -9,18 +9,30 @@ export default function ConfermaPage() {
     const searchParams = useSearchParams()
     const supabase = createClient()
     const bookingId = searchParams.get("booking")
-
     useEffect(() => {
         async function carica() {
             if (!bookingId) return
-            const { data } = await supabase
-                .from("bookings")
-                .select("*, rooms(nome, citta, zona)")
-                .eq("id", bookingId)
-                .single()
+
+            const [{ data: { session } }, { data }] = await Promise.all([
+                supabase.auth.getSession(),
+                supabase.from("bookings").select("*, rooms(nome, citta, zona)").eq("id", bookingId).single()
+            ])
+
             if (data) {
                 setBooking(data)
-                router.refresh()
+                fetch("http://localhost:3001/api/email/conferma", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        email: session?.user?.email || "",
+                        nome: "",
+                        camera: data.rooms?.nome,
+                        checkin: data.checkin,
+                        checkout: data.checkout,
+                        totale: data.prezzo_totale,
+                        codice: data.codice_conferma
+                    })
+                })
             }
         }
         carica()
@@ -28,7 +40,7 @@ export default function ConfermaPage() {
 
     if (!booking) return (
         <main className="min-h-screen bg-white flex items-center justify-center">
-            <p className="text-gray-400 text-sm">Caricamento...</p>
+            <p className="text-gray-400 text-sm">Caricamento In Corso...</p>
         </main>
     )
 

@@ -82,6 +82,7 @@ export default function PrenotaPage({ params: paramsPromise }) {
         .eq("stato", "in_attesa")
         .maybeSingle()
 
+
       let booking = esistente
 
       if (!booking) {
@@ -100,7 +101,6 @@ export default function PrenotaPage({ params: paramsPromise }) {
 
       if (!booking) { setErrore("Errore nella prenotazione"); return }
       setBookingId(booking.id)
-
       const res = await fetch("http://localhost:3001/api/pagamenti/crea-intent", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -119,7 +119,7 @@ export default function PrenotaPage({ params: paramsPromise }) {
     </main>
   )
 
-  if (!pronto) return (
+  if (!pronto || !clientSecret) return (
     <main className="min-h-screen bg-white flex items-center justify-center">
       <p className="text-gray-400 text-sm">Preparazione pagamento...</p>
     </main>
@@ -141,10 +141,12 @@ export default function PrenotaPage({ params: paramsPromise }) {
             </div>
           </div>
         </div>
-        <Elements stripe={stripePromise} options={{ clientSecret }}>
-          <FormPagamento bookingId={bookingId} />
-        </Elements>
+        {clientSecret && (
+          <Elements stripe={stripePromise} options={{ clientSecret }}>
+            <FormPagamento bookingId={bookingId} />
+          </Elements>
+        )}
       </div>
-    </main>
+    </main >
   )
 }
