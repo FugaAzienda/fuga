@@ -4,6 +4,9 @@ import StruttureList from "@/components/StruttureList"
 export default async function CercaPage({ searchParams }) {
   const params = await searchParams
   const dest = params?.dest || ""
+  const checkin = params?.checkin || ""
+  const checkout = params?.checkout || ""
+  const ospiti = params?.ospiti || "1"
 
   const { data: risultati, error } = await supabase
     .from("rooms")
@@ -24,7 +27,7 @@ export default async function CercaPage({ searchParams }) {
         <p className="text-gray-400 mb-8">
           {risultati.length} strutture trovate
         </p>
-        <StruttureList strutture={risultati} checkin={params?.checkin} checkout={params?.checkout} ospiti={params?.ospiti} />
+        <StruttureList strutture={risultati} checkin={checkin} checkout={checkout} ospiti={ospiti} />
       </div>
     </main>
   )

@@ -12,6 +12,7 @@ export default function ProfiloPage() {
   const [caricamento, setCaricamento] = useState(false)
   const [salvato, setSalvato] = useState(false)
   const [modificando, setModificando] = useState(false)
+  const [prenotazioni, setPrenotazioni] = useState([])
   const supabase = createClient()
   const router = useRouter()
 
@@ -27,6 +28,13 @@ export default function ProfiloPage() {
       }
       setUtente(session.user)
       setPronto(true)
+      const { data: prenotazioni } = await supabase
+        .from("bookings")
+        .select("*, rooms(nome, citta, zona)")
+        .eq("user_id", session.user.id)
+        .order("created_at", { ascending: false })
+
+      setPrenotazioni(prenotazioni || [])
     }
     init()
   }, [])
@@ -134,6 +142,32 @@ export default function ProfiloPage() {
               className="bg-gray-900 text-white rounded-xl px-4 py-3 text-sm font-medium hover:bg-gray-700 transition-colors disabled:opacity-50">
               {caricamento ? "Salvataggio..." : "Salva modifiche"}
             </button>
+          )}
+        </div>
+        <div className="mt-10">
+          <h2 className="text-lg font-bold text-gray-900 mb-4">Le tue prenotazioni</h2>
+          {prenotazioni.length === 0 ? (
+            <p className="text-sm text-gray-400">Nessuna prenotazione ancora</p>
+          ) : (
+            <div className="flex flex-col gap-3">
+              {prenotazioni.map(p => (
+                <div key={p.id} className="border border-gray-200 rounded-2xl p-4">
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="font-semibold text-gray-900 text-sm">{p.rooms?.nome}</h3>
+                    <span className={`text-xs px-2 py-1 rounded-full ${p.stato === "confermato" ? "bg-green-100 text-green-700" :
+                        p.stato === "in_attesa" ? "bg-yellow-100 text-yellow-700" :
+                          "bg-gray-100 text-gray-500"
+                      }`}>{p.stato}</span>
+                  </div>
+                  <p className="text-xs text-gray-400 mb-1">{p.rooms?.citta} · {p.rooms?.zona}</p>
+                  <div className="flex justify-between text-xs text-gray-500 mt-2">
+                    <span>{p.checkin} → {p.checkout}</span>
+                    <span className="font-semibold text-gray-900">€{p.prezzo_totale}</span>
+                  </div>
+                  <p className="text-xs text-gray-300 mt-1 font-mono">{p.codice_conferma}</p>
+                </div>
+              ))}
+            </div>
           )}
         </div>
       </div>

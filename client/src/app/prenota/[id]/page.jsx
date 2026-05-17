@@ -57,33 +57,47 @@ export default function PrenotaPage({ params: paramsPromise }) {
   const checkout = searchParams.get("checkout")
   const ospiti = searchParams.get("ospiti") || 1
 
+  const notti = checkin && checkout
+    ? Math.ceil((new Date(checkout) - new Date(checkin)) / (1000 * 60 * 60 * 24))
+    : 1
+
   useEffect(() => {
     async function init() {
       const { data: { session } } = await supabase.auth.getSession()
       if (!session) { router.push("/auth/login"); return }
 
       const { data: cam } = await supabase.from("rooms").select("*").eq("id", Number(params.id)).single()
-      console.log("params.id:", params.id, "cam:", cam)
       if (!cam) { setErrore("Camera non trovata"); return }
       setCamera(cam)
 
-      const notti = checkin && checkout
-        ? Math.ceil((new Date(checkout) - new Date(checkin)) / (1000 * 60 * 60 * 24))
-        : 1
       const totale = cam.prezzo_base * notti
 
-      const codice = "FUG-" + Date.now().toString(36).toUpperCase()
-      const { data: booking, error: bookingError } = await supabase.from("bookings").insert({
-        user_id: session.user.id,
-        room_id: Number(params.id),
-        checkin,
-        checkout,
-        num_ospiti: Number(ospiti),
-        prezzo_totale: totale,
-        codice_conferma: codice
-      }).select().single()
+      const { data: esistente } = await supabase
+        .from("bookings")
+        .select("*")
+        .eq("user_id", session.user.id)
+        .eq("room_id", Number(params.id))
+        .eq("checkin", checkin)
+        .eq("checkout", checkout)
+        .eq("stato", "in_attesa")
+        .maybeSingle()
 
-      console.log("booking:", booking, "error:", bookingError)
+      let booking = esistente
+
+      if (!booking) {
+        const codice = "FUG-" + Date.now().toString(36).toUpperCase()
+        const { data: nuova } = await supabase.from("bookings").insert({
+          user_id: session.user.id,
+          room_id: Number(params.id),
+          checkin,
+          checkout,
+          num_ospiti: Number(ospiti),
+          prezzo_totale: totale,
+          codice_conferma: codice
+        }).select().single()
+        booking = nuova
+      }
+
       if (!booking) { setErrore("Errore nella prenotazione"); return }
       setBookingId(booking.id)
 
@@ -98,10 +112,6 @@ export default function PrenotaPage({ params: paramsPromise }) {
     }
     init()
   }, [])
-
-  const notti = checkin && checkout
-    ? Math.ceil((new Date(checkout) - new Date(checkin)) / (1000 * 60 * 60 * 24))
-    : 1
 
   if (errore) return (
     <main className="min-h-screen bg-white flex items-center justify-center">
