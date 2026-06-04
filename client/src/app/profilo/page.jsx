@@ -20,21 +20,20 @@ export default function ProfiloPage() {
     async function init() {
       const { data: { session } } = await supabase.auth.getSession()
       if (!session) { router.push("/auth/login"); return }
-      const { data } = await supabase.from("profiles").select("*").eq("id", session.user.id).single()
-      if (data) {
-        setNome(data.nome || "")
-        setCognome(data.cognome || "")
-        setAvatarUrl(data.avatar_url || null)
+
+      const [{ data: profilo }, { data: prenotazioni }] = await Promise.all([
+        supabase.from("profiles").select("*").eq("id", session.user.id).single(),
+        supabase.from("bookings").select("*, rooms(nome, citta, zona)").eq("user_id", session.user.id).order("created_at", { ascending: false })
+      ])
+
+      if (profilo) {
+        setNome(profilo.nome || "")
+        setCognome(profilo.cognome || "")
+        setAvatarUrl(profilo.avatar_url || null)
       }
+      setPrenotazioni(prenotazioni || [])
       setUtente(session.user)
       setPronto(true)
-      const { data: prenotazioni } = await supabase
-        .from("bookings")
-        .select("*, rooms(nome, citta, zona)")
-        .eq("user_id", session.user.id)
-        .order("created_at", { ascending: false })
-
-      setPrenotazioni(prenotazioni || [])
     }
     init()
   }, [])
@@ -155,8 +154,8 @@ export default function ProfiloPage() {
                   <div className="flex justify-between items-start mb-2">
                     <h3 className="font-semibold text-gray-900 text-sm">{p.rooms?.nome}</h3>
                     <span className={`text-xs px-2 py-1 rounded-full ${p.stato === "confermato" ? "bg-green-100 text-green-700" :
-                        p.stato === "in_attesa" ? "bg-yellow-100 text-yellow-700" :
-                          "bg-gray-100 text-gray-500"
+                      p.stato === "in_attesa" ? "bg-yellow-100 text-yellow-700" :
+                        "bg-gray-100 text-gray-500"
                       }`}>{p.stato}</span>
                   </div>
                   <p className="text-xs text-gray-400 mb-1">{p.rooms?.citta} · {p.rooms?.zona}</p>

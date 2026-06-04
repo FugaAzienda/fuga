@@ -63,10 +63,11 @@ export default function PrenotaPage({ params: paramsPromise }) {
 
   useEffect(() => {
     async function init() {
-      const { data: { session } } = await supabase.auth.getSession()
+      const [{ data: { session } }, { data: cam }] = await Promise.all([
+        supabase.auth.getSession(),
+        supabase.from("rooms").select("*").eq("id", Number(params.id)).single()
+      ])
       if (!session) { router.push("/auth/login"); return }
-
-      const { data: cam } = await supabase.from("rooms").select("*").eq("id", Number(params.id)).single()
       if (!cam) { setErrore("Camera non trovata"); return }
       setCamera(cam)
 
