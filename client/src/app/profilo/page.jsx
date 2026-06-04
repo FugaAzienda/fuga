@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react"
 import { createClient } from "@/lib/supabase-browser"
 import { useRouter } from "next/navigation"
-
+export const dynamic = 'force-dynamic'
 export default function ProfiloPage() {
   const [pronto, setPronto] = useState(false)
   const [utente, setUtente] = useState(null)

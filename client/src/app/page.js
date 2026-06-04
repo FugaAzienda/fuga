@@ -2,6 +2,7 @@ import { supabase } from "@/lib/supabase"
 import SearchBar from "@/components/SearchBar"
 import DestinazioniPopari from "@/components/DestinazioniPopari"
 import Saluto from "@/components/Saluto"
+export const dynamic = 'force-dynamic'
 export default async function HomePage() {
   const { data: strutture } = await supabase.from("rooms").select("citta")
 

@@ -4,7 +4,7 @@ import { useSearchParams, useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase-browser"
 import { loadStripe } from "@stripe/stripe-js"
 import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js"
-
+export const dynamic = 'force-dynamic'
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
 
 function FormPagamento({ bookingId }) {

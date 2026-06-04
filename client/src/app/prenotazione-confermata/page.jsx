@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { useSearchParams } from "next/navigation"
 import { createClient } from "@/lib/supabase-browser"
 import Link from "next/link"
-
+export const dynamic = 'force-dynamic'
 export default function ConfermaPage() {
     const [booking, setBooking] = useState(null)
     const searchParams = useSearchParams()

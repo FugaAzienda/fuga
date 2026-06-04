@@ -3,7 +3,7 @@ import { useState } from "react"
 import { createClient } from "@/lib/supabase-browser"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-
+export const dynamic = 'force-dynamic'
 export default function RegistratiPage() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
