@@ -1,6 +1,6 @@
 import { supabase } from "@/lib/supabase"
 import StruttureList from "@/components/StruttureList"
-
+export const dynamic = 'force-dynamic'
 export default async function CercaPage({ searchParams }) {
   const params = await searchParams
   const dest = params?.dest || ""
