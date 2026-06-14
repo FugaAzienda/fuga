@@ -17,14 +17,17 @@ export default function SearchBar() {
   function handleCerca() {
     if (!destinazione) {
       setErroreRicerca("Inserisci una destinazione")
+      setTimeout(() => setErroreRicerca(""), 3000)
       return
     }
     if (!checkin) {
       setErroreRicerca("Inserisci la data di check-in")
+      setTimeout(() => setErroreRicerca(""), 3000)
       return
     }
     if (!checkout) {
       setErroreRicerca("Inserisci la data di check-out")
+      setTimeout(() => setErroreRicerca(""), 3000)
       return
     }
     setErroreRicerca("")
