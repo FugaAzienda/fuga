@@ -17,15 +17,19 @@ export default function ProfiloPage() {
   const router = useRouter()
 
   useEffect(() => {
+    console.log("useEffect partito")
+
     async function init() {
+      console.log("init partita")
       const { data: { session } } = await supabase.auth.getSession()
+      console.log("sessione:", session?.user?.email)
       if (!session) { router.push("/auth/login"); return }
 
       const [{ data: profilo }, { data: prenotazioni }] = await Promise.all([
         supabase.from("profiles").select("*").eq("id", session.user.id).single(),
         supabase.from("bookings").select("*, rooms(nome, citta, zona)").eq("user_id", session.user.id).order("created_at", { ascending: false })
       ])
-
+      console.log("profilo:", profilo, "prenotazioni:", prenotazioni)
       if (profilo) {
         setNome(profilo.nome || "")
         setCognome(profilo.cognome || "")
