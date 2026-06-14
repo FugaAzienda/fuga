@@ -102,7 +102,7 @@ export default function PrenotaPage({ params: paramsPromise }) {
 
       if (!booking) { setErrore("Errore nella prenotazione"); return }
       setBookingId(booking.id)
-      const res = await fetch("http://localhost:3001/api/pagamenti/crea-intent", {
+      const res = await fetch("http://fuga-server.onrender.com/api/pagamenti/crea-intent", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ importo: totale, booking_id: booking.id })

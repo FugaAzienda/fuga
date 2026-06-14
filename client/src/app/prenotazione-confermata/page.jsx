@@ -21,7 +21,7 @@ function ConfermaContent() {
       ])
       if (data) {
         setBooking(data)
-        fetch("http://localhost:3001/api/email/conferma", {
+        fetch("http://fuga-server.onrender.com/api/email/conferma", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
