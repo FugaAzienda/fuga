@@ -53,6 +53,9 @@ export default function Header() {
       <div className="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
         <Link href="/" className="text-xl font-bold text-gray-900">Fuga</Link>
         <nav className="flex gap-6 items-center">
+          <Link href="/diventa-venditore" className="text-sm text-gray-400 hover:text-gray-900">
+            Vendi su Fuga
+          </Link>
           <Link href="/" className={`text-sm ${pathname === "/" ? "text-gray-900 font-semibold" : "text-gray-400 hover:text-gray-900"}`}>Home</Link>
           <Link href="/cerca" className={`text-sm ${pathname === "/cerca" ? "text-gray-900 font-semibold" : "text-gray-400 hover:text-gray-900"}`}>Esplora</Link>
           {utente ? (
@@ -63,7 +66,7 @@ export default function Header() {
                     <img src={avatarUrl} alt="avatar" className="w-full h-full object-cover" />
                   ) : (
                     <svg className="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+                      <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z" />
                     </svg>
                   )}
                 </div>
